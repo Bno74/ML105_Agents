@@ -11,3 +11,8 @@ langgraph
 langgraph_supervisor
 langgraph_swarm
 
+
+
+google-genai
+
+streamlit

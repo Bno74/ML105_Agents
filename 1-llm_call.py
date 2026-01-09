@@ -1,37 +1,40 @@
-import boto3
+from google import genai
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Set Parameters
-model_id = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+model_id = "gemini-3-flash-preview"
 
-# Initialize AWS Bedrock client
-bedrock_runtime = boto3.client(
-    'bedrock-runtime',
-    region_name=os.getenv("AWS_REGION", "us-east-1")
-)
+# Initialize Google Generative AI client
+api_key = os.getenv("GEMINI_API_KEY")
 
-# Query to send to Claude
+if not api_key or "your_gemini_api_key_here" in api_key:
+    # Explicitly warn the user if they haven't set the key
+    print(f"\n❌ ERROR: Invalid API Key. Found: '{api_key}'")
+    print("Please open the .env file and replace 'your_gemini_api_key_here' with your actual API key.")
+    print("Don't forget to SAVE the file (Ctrl+S)!")
+    print("You can get a free key from: https://aistudio.google.com/app/apikey\n")
+    exit(1)
+
+client = genai.Client(api_key=api_key)
+
+# Query to send to Gemini
 query = input("👤 Enter your query: ")
 
-# Make the API call using Converse API
+# Make the API call
 try:
     print("🤖 System call")
-    response = bedrock_runtime.converse(
-        modelId=model_id,
-        messages=[
-            {
-                "role": "user",
-                "content": [{"text": query}]
-            }
-        ],
-        inferenceConfig={"maxTokens": 1024}
+    response = client.models.generate_content(
+        model=model_id,
+        contents=query
     )
     
     # Extract and print the response
-    output = response['output']['message']['content'][0]['text']
+    output = response.text
     print(f"👤 Query: {query}")
     print(f"\nResponse:\n{output}")
     
 except Exception as e:
-    print(f"Error calling Bedrock: {e}")
-
+    print(f"Error calling Gemini: {e}")
