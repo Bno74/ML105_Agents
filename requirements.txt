@@ -16,3 +16,5 @@ langgraph_swarm
 google-genai
 
 streamlit
+
+python-dotenv
