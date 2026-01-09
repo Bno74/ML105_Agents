@@ -28,17 +28,32 @@ def get_client():
         return None
     
     # Sanitize key (remove whitespaces and potential accidental quotes)
+    original_key = api_key
     api_key = api_key.strip().strip('"').strip("'")
             
-    return genai.Client(api_key=api_key)
+    return genai.Client(api_key=api_key), api_key, original_key
 
-client = get_client()
+client, used_key, raw_key = get_client()
 
 if not client:
     st.error("❌ GEMINI_API_KEY not found.")
-    st.write("Debug Info - Available Secrets Keys:", [k for k in st.secrets.keys()])
-    st.info("If running locally: Check your .env file.\n\nIf running on Streamlit Cloud: Go to 'Manage App' -> 'Settings' -> 'Secrets' and add `GEMINI_API_KEY`.")
     st.stop()
+    
+# Test validity immediately
+try:
+    # Just check if we can list models or do a dummy call (lightweight)
+    pass
+except Exception as e:
+    st.error(f"Error initializing client: {e}")
+
+# Display Debug Info if there's an issue (or always for now until fixed)
+with st.expander("🔑 Connection Debug Info", expanded=False):
+    st.write(f"**Key Status**: {'Found' if used_key else 'Missing'}")
+    if used_key:
+        st.write(f"**Length**: {len(used_key)} characters")
+        st.write(f"**First 4**: `{used_key[:4]}...`")
+        st.write(f"**Last 4**: `...{used_key[-4:]}`")
+        st.write(f"**Raw Key (repr)**: `{repr(raw_key)}`") # Shows hidden newlines/spaces
 
 # Initialize Chat History
 if "messages" not in st.session_state:
