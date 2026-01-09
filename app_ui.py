@@ -1,5 +1,6 @@
 import streamlit as st
 from google import genai
+import time
 import os
 from dotenv import load_dotenv
 
@@ -62,16 +63,40 @@ if prompt := st.chat_input("What is up?"):
     with st.chat_message("user"):
         st.markdown(prompt)
 
+
+
     # Generate Response
     try:
         with st.chat_message("assistant"):
             # Use the model requested by user
             model_id = "gemini-3-flash-preview"
             
-            response = client.models.generate_content(
-                model=model_id,
-                contents=prompt
-            )
+            response = None
+            retry_count = 0
+            max_retries = 3
+            
+            placeholder = st.empty()
+            
+            while retry_count < max_retries:
+                try:
+                    response = client.models.generate_content(
+                        model=model_id,
+                        contents=prompt
+                    )
+                    break 
+                except Exception as e:
+                    if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
+                        retry_count += 1
+                        if retry_count == max_retries:
+                            raise e
+                        
+                        wait_time = retry_count * 15 # Wait 15s, 30s...
+                        placeholder.warning(f"Rate limit hit. Retrying in {wait_time}s... (Attempt {retry_count}/{max_retries})")
+                        time.sleep(wait_time)
+                        placeholder.empty()
+                    else:
+                        raise e
+
             response_text = response.text
             st.markdown(response_text)
             
