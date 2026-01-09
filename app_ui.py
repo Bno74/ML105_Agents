@@ -85,13 +85,16 @@ if prompt := st.chat_input("What is up?"):
                     )
                     break 
                 except Exception as e:
-                    if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
+                    # Check for Rate Limit (429) or Quota issues
+                    error_str = str(e)
+                    if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str or "quota" in error_str.lower():
                         retry_count += 1
                         if retry_count == max_retries:
                             raise e
                         
-                        wait_time = retry_count * 15 # Wait 15s, 30s...
-                        placeholder.warning(f"Rate limit hit. Retrying in {wait_time}s... (Attempt {retry_count}/{max_retries})")
+                        # Increase wait time: 20s, 40s, 60s
+                        wait_time = retry_count * 20 
+                        placeholder.warning(f"⚠️ Rate limit hit. Waiting {wait_time} seconds before retrying... (Attempt {retry_count}/{max_retries})")
                         time.sleep(wait_time)
                         placeholder.empty()
                     else:
