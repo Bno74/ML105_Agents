@@ -14,7 +14,16 @@ st.title("🤖 Chat with Gemini 3.0 Flash")
 # Initialize Client
 @st.cache_resource
 def get_client():
+    # Try getting key from environment (Local .env)
     api_key = os.getenv("GEMINI_API_KEY")
+    
+    # If not found, try getting from Streamlit Secrets (Cloud)
+    if not api_key:
+        try:
+            api_key = st.secrets["GEMINI_API_KEY"]
+        except:
+            pass
+            
     if not api_key:
         return None
     return genai.Client(api_key=api_key)
@@ -22,7 +31,8 @@ def get_client():
 client = get_client()
 
 if not client:
-    st.error("❌ GEMINI_API_KEY not found in .env file.")
+    st.error("❌ GEMINI_API_KEY not found.")
+    st.info("If running locally: Check your .env file.\n\nIf running on Streamlit Cloud: Go to 'Manage App' -> 'Settings' -> 'Secrets' and add `GEMINI_API_KEY`.")
     st.stop()
 
 # Initialize Chat History
