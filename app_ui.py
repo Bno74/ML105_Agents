@@ -100,11 +100,15 @@ if prompt := st.chat_input("What is up?"):
                     else:
                         raise e
 
-            response_text = response.text
-            st.markdown(response_text)
-            
-            # Add assistant message to state
-            st.session_state.messages.append({"role": "assistant", "content": response_text})
+            try:
+                response_text = response.text
+                st.markdown(response_text)
+                # Add assistant message to state
+                st.session_state.messages.append({"role": "assistant", "content": response_text})
+            except Exception as e:
+                # Often happens if response is blocked by safety filters
+                st.warning("⚠️ The model refused to answer (Safety Filter Triggered).")
+                st.write(f"Debug details: {response.candidates[0].finish_reason if response.candidates else 'No candidates'}")
             
     except Exception as e:
         st.error(f"Error: {e}")
