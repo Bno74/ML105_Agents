@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Page configuration - Must be the first streamlt command
-st.set_page_config(page_title="Gemini ChatBot", page_icon="🤖")
+st.set_page_config(page_title="n7ob4", page_icon="🤖")
 
-st.title("🤖 Chat with Gemini 3.0 Flash")
+st.title("🤖 n7ob4")
 
 # Initialize Client
 @st.cache_resource
