@@ -26,6 +26,10 @@ def get_client():
             
     if not api_key:
         return None
+    
+    # Sanitize key (remove whitespaces and potential accidental quotes)
+    api_key = api_key.strip().strip('"').strip("'")
+            
     return genai.Client(api_key=api_key)
 
 client = get_client()
