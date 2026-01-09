@@ -32,6 +32,7 @@ client = get_client()
 
 if not client:
     st.error("❌ GEMINI_API_KEY not found.")
+    st.write("Debug Info - Available Secrets Keys:", [k for k in st.secrets.keys()])
     st.info("If running locally: Check your .env file.\n\nIf running on Streamlit Cloud: Go to 'Manage App' -> 'Settings' -> 'Secrets' and add `GEMINI_API_KEY`.")
     st.stop()
 
