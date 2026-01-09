@@ -28,12 +28,11 @@ def get_client():
         return None
     
     # Sanitize key (remove whitespaces and potential accidental quotes)
-    original_key = api_key
     api_key = api_key.strip().strip('"').strip("'")
             
-    return genai.Client(api_key=api_key), api_key, original_key
+    return genai.Client(api_key=api_key)
 
-client, used_key, raw_key = get_client()
+client = get_client()
 
 if not client:
     st.error("❌ GEMINI_API_KEY not found.")
@@ -45,15 +44,6 @@ try:
     pass
 except Exception as e:
     st.error(f"Error initializing client: {e}")
-
-# Display Debug Info if there's an issue (or always for now until fixed)
-with st.expander("🔑 Connection Debug Info", expanded=False):
-    st.write(f"**Key Status**: {'Found' if used_key else 'Missing'}")
-    if used_key:
-        st.write(f"**Length**: {len(used_key)} characters")
-        st.write(f"**First 4**: `{used_key[:4]}...`")
-        st.write(f"**Last 4**: `...{used_key[-4:]}`")
-        st.write(f"**Raw Key (repr)**: `{repr(raw_key)}`") # Shows hidden newlines/spaces
 
 # Initialize Chat History
 if "messages" not in st.session_state:
