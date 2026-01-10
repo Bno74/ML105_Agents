@@ -1,5 +1,6 @@
 import streamlit as st
 from google import genai
+from google.genai import types
 import time
 import os
 from dotenv import load_dotenv
@@ -18,11 +19,36 @@ hide_st_style = """
             #MainMenu {visibility: hidden;}
             header {visibility: hidden;}
             footer {visibility: hidden;}
+            .stDeployButton {display:none;}
+            [data-testid="stToolbar"] {visibility: hidden !important;}
+            [data-testid="stDecoration"] {visibility: hidden !important;}
+            [data-testid="stStatusWidget"] {visibility: hidden !important;}
+            [data-testid="stHeader"] {display: none !important;}
+            header {display: none !important;}
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-# Initialize Client
+# Sidebar Configuration
+with st.sidebar:
+    st.header("⚙️ Settings")
+    system_prompt = st.text_area("System Persona", value="You are a helpful AI assistant.")
+    
+    with st.expander("Advanced"):
+        temperature = st.slider("Temperature", 0.0, 2.0, 1.0, 0.1)
+        max_tokens = st.slider("Max Tokens", 100, 8192, 2048, 100)
+        
+    st.divider()
+    
+    # Download Chat History
+    import json
+    chat_json = json.dumps(st.session_state.get("messages", []), indent=2)
+    st.download_button("📥 Download History", chat_json, "chat_history.json", "application/json")
+    
+    if st.button("🗑️ Clear Chat"):
+        st.session_state.messages = []
+        st.rerun()
+
 @st.cache_resource
 def get_client():
     # Try getting key from environment (Local .env)
@@ -91,7 +117,12 @@ if prompt := st.chat_input("What is up?"):
                 try:
                     response = client.models.generate_content(
                         model=model_id,
-                        contents=prompt
+                        contents=prompt,
+                        config=types.GenerateContentConfig(
+                            system_instruction=system_prompt,
+                            temperature=temperature,
+                            max_output_tokens=max_tokens
+                        )
                     )
                     break 
                 except Exception as e:
