@@ -12,6 +12,16 @@ st.set_page_config(page_title="n7ob4", page_icon="🤖")
 
 st.title("🤖 n7ob4")
 
+# Hide Streamlit Style
+hide_st_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            header {visibility: hidden;}
+            footer {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_st_style, unsafe_allow_html=True)
+
 # Initialize Client
 @st.cache_resource
 def get_client():
