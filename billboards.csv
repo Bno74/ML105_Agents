@@ -1,0 +1,36 @@
+Location,Dimension,Facing,Resolution,LED Model,Time Schedule,Total Hours,Minimum Duration,Break Time,Cost per min (BDT),Notes/Availability
+"Gulshan Circle-1, Upper",W-30' x H-20',Police Plaza & Mohakhali,1920p x 1080p,P5,8am-10pm,14,60min/day,N/A,160,
+Gulshan Circle-1 Mid Island,W-20' x H-10',Gulshan 2 & Mohakhali / Police Plaza,1920p x 1080p,P5,9am-8pm,9,60min/day,11:00am - 1:00pm,160,Multiple views of the same billboard
+Gulshan Circle-2 (West Side) Barun Bhaban,W-30' x H-15',Baridhara & Notun Bazar,1920p x 1080p,P6,9am-11pm,13,60min/day,1:00pm - 2:00pm,170,
+Gulshan Circle-2 (East Side) Rob Super Market,W-40' x H-20',Gulshan-1 & Banani,1920p x 1080p,P6,8am-11pm,14,60min/day,1:00pm - 2:00pm,180,
+Gulshan Circle-2 (North Side) Lower Screen,W-28' x H-15',Gulshan-1,1920p x 1080p,P6,8am-11pm,14,30min/day,1:00pm - 2:00pm,150,
+Gulshan Circle-2 (East Side) Amanullah Trade Center,W-32' x H-14',Banani,1920p x 1080p,P6,10am-11pm,12,60min/day,1:00pm - 2:00pm,200,Not Available
+Police Plaza (South Side),W-20' x H-30',Hatirjheel & GMG Mor,1152p x 1536p,P10,8am-12am,15,60min/day,2:00pm - 3:00pm,160,
+Police Plaza (Gulshan-1 Facing),W-20' x H-30',Gulshan-1,1152p x 1536p,P10,8am-12am,15,60min/day,2:00pm - 3:00pm,200,Not Available
+Police Plaza Front Side,W-10' x H-13',Gulshan-1 / Tejgaon & GMG Mor,1080p x 1920p,P5,8am-11pm,14,60min/day,2:00pm - 3:00pm,80,"Multiple views, possibly two screens"
+Police Plaza Entry Gate (South side),W-6.5' x H-9.5',South side Entry Gate,640p x 960p,P3,10am-10pm,11,60min/day,2:00pm - 3:00pm,50,
+Police Plaza Entry Gate (North side),W-6.5' x H-9.5',North side entry Gate,640p x 960p,P3,10am-10pm,11,60min/day,2:00pm - 3:00pm,50,
+Airport Entrance (Banani Facing),W-25' x H-12.5',Banani,1920p x 1080p,P6,9am-9pm,11,60min/day,1:00pm - 2:00pm,160,
+Bijoy Saroni Mor,W-22' x H-11.5',Circle,1920p x 1080p,P4,9am-10pm,12,60min/day,1:00pm - 2:00pm,160,
+Unknown (possibly near Bijoy Saroni),W-10' x H-12',Not specified,1920p x 1080p,Not specified,10:30am-8:30pm,9,60min/day,1:00pm - 2:00pm,120,Location not explicitly named in page
+Manik Mia Avenue Aarong Signal,W-40' x H-20',Khamar Bari,1920p x 1080p,P6,10am-10pm,12,60min/day,Not specified,175,Not Available
+Khamar Bari Moor,W-13' x H-8',Circle/Farmgate,1920p x 1080p,P4,9am-10pm,12,60min/day,1:00pm - 2:00pm,130,
+"Dhanmondi – 27, Opposite of Rapa Plaza",W-23' x H-12.5',Rapa plaza,1920p x 1080p,P6,8am-11pm,14,60min/day,1:00pm - 2:00pm,140,
+"Dhanmondi – 27, Mid Island Opposite of Rapa Plaza",W-10' x H-13',Asad Gate,1920p x 1080p,P6,8am-11pm,14,30min/day,1:00pm - 2:00pm,130,
+Dhanmondi-2,W-18' x H-11',New Market,1920p x 1080p,P6,9am-10pm,12,60min/day,2:00pm - 3:00pm,170,
+Science Lab Circle -01,W-8' x H-13',Dhanmondi & City College,1080p x 1920p,P5,9am-11pm,13,60min/day,2:00pm - 3:00pm,100,
+Science Lab Circle-02,W-8' x H-13',Elephant road & Bata Signal,1080p x 1920p,P5,9am-11pm,13,60min/day,2:00pm - 3:00pm,100,
+City College Circle,W-7' x H-10',New Market,1280p x 1920p,P4,9am-11pm,13,60min/day,2:00pm - 3:00pm,100,
+"Green Road Crossing, U-turn",W-22' x H-12.5',New Market,1280p x 1920p,P4,9am-11pm,13,60min/day,2:00pm - 3:00pm,130,
+Shimanto Square (6 LED Screens),W-2.6' x H-4',"Dhanmondi, Road-2",1080p x 1920p,P5,9am-10pm,11,60min/day,1:00pm - 3:00pm,130 (for 6 screens),
+Bashundhara City Indoor,W-19' x H-16',Bashundhara Gate 1,1920p x 1080p,P6,10am-10pm,12,60min/day,Not specified,180,Day Off: Tuesday
+Karwan Bazar,W-22' x H-12.5',Farmgate,1920p x 1080p,P6,10am-10pm,13,60min/day,1:00pm - 2:00pm,140,
+Mirpur-10 Circle (4 Screens),W-8' x H-6',"Mirpur1,12,14 & Rokeya Sharani",1920p x 1080p,P6,9am-11pm,12,60min/day,1:00pm - 3:00pm,130 (for 4 screens),
+"Bata Signal, Elephant Road",W-12' x H-8',Shahbag,1920p x 1080p,P4,9am-11pm,13,60min/day,1:00pm - 2:00pm,100,
+"Science Lab, In Front of Lab Aid Hospital",W-23' x H-12.5',"Science Lab, New Market",1920p x 1080p,P4,10:00am-10:00pm,11,60min/day,1:00pm - 2:00pm,150,
+Mohakhali Rail Crossing,W-13' x H-8',Jahangir Gate & SKS Tower,1920p x 1080p,P5,9am-10pm,12,60min/day,1:00pm - 2:00pm,120,
+"SKS Tower, Flyover View, Mohakhali",W-50' x H-30',Mohakhali Flyover,3840p x 2160p,P10,9am-11pm,13,60min/day,2:00pm - 3:00pm,200,Cost for 4 screens? (possibly multi-screen setup)
+"SKS Tower, Exit Gate, Mohakhali",W-14' x H-20',Rawa Club,1920p x 1080p,P5,9am-11pm,13,60min/day,2:00pm - 3:00pm,100,
+"SKS Tower, Entrance, Mohakhali",W-11' x H-17',Jahangir Gate & Vip Road,1920p x 1080p,P5,9am-11pm,13,60min/day,2:00pm - 3:00pm,100,
+Hotel Radisson Blu,W-22' x H-12',Banani & Radisson Blu,1920p x 1080p,P6,10am-10pm,11,60min/day,1:00pm - 2:00pm,130,
+Sadarghat Launch Terminal,W-25' x H-12.5',Parking,1920p x 1080p,P6,9am-10pm,11,60min/day,1:00pm - 3:00pm,150,

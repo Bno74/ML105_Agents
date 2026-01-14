@@ -1,6 +1,7 @@
 import streamlit as st
 from google import genai
 from google.genai import types
+from PIL import Image
 import time
 import os
 from dotenv import load_dotenv
@@ -37,7 +38,7 @@ with st.sidebar:
     with st.expander("Advanced"):
         temperature = st.slider("Temperature", 0.0, 2.0, 1.0, 0.1)
         max_tokens = st.slider("Max Tokens", 100, 8192, 2048, 100)
-        
+
     st.divider()
     
     # Download Chat History
@@ -91,6 +92,14 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
+# File Uploader (Chat Integration)
+with st.popover("📎 Attach"):
+    uploaded_file = st.file_uploader(
+        "Upload Image/PDF", 
+        type=["png", "jpg", "jpeg", "pdf"],
+        key="chat_uploader" 
+    )
+
 # User Input
 if prompt := st.chat_input("What is up?"):
     # Add user message to state
@@ -98,8 +107,8 @@ if prompt := st.chat_input("What is up?"):
     # Display user message
     with st.chat_message("user"):
         st.markdown(prompt)
-
-
+        if uploaded_file:
+            st.info(f"📎 Attached: {uploaded_file.name}")
 
     # Generate Response
     try:
@@ -111,15 +120,38 @@ if prompt := st.chat_input("What is up?"):
             retry_count = 0
             max_retries = 3
             
+            # Prepare Content
+            generation_content = [prompt]
+            if uploaded_file:
+                # Reset file pointer
+                uploaded_file.seek(0)
+                if uploaded_file.type in ["image/png", "image/jpeg", "image/jpg"]:
+                    img = Image.open(uploaded_file)
+                    generation_content.append(img)
+                elif uploaded_file.type == "application/pdf":
+                    generation_content.append(types.Part.from_bytes(
+                        data=uploaded_file.getvalue(),
+                        mime_type="application/pdf"
+                    ))
+            
+            # Load Knowledge Base (Billboards)
+            try:
+                with open("billboards.csv", "r") as f:
+                    kb_data = f.read()
+                full_system_prompt = f"{system_prompt}\n\nKnowledge Base (Billboards):\n{kb_data}"
+            except Exception as e:
+                # Fallback if file missing
+                full_system_prompt = system_prompt
+            
             placeholder = st.empty()
             
             while retry_count < max_retries:
                 try:
                     response = client.models.generate_content(
                         model=model_id,
-                        contents=prompt,
+                        contents=generation_content,
                         config=types.GenerateContentConfig(
-                            system_instruction=system_prompt,
+                            system_instruction=full_system_prompt,
                             temperature=temperature,
                             max_output_tokens=max_tokens
                         )
