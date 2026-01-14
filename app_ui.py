@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Page configuration - Must be the first streamlt command
-st.set_page_config(page_title="n7ob4", page_icon="🤖", initial_sidebar_state="expanded")
+st.set_page_config(page_title="n7ob4", page_icon="🤖")
 
 st.title("🤖 n7ob4")
 
@@ -18,8 +18,14 @@ st.title("🤖 n7ob4")
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
+            header {visibility: hidden;}
             footer {visibility: hidden;}
             .stDeployButton {display:none;}
+            [data-testid="stToolbar"] {visibility: hidden !important;}
+            [data-testid="stDecoration"] {visibility: hidden !important;}
+            [data-testid="stStatusWidget"] {visibility: hidden !important;}
+            [data-testid="stHeader"] {display: none !important;}
+            header {display: none !important;}
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
@@ -27,11 +33,6 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 # Sidebar Configuration
 with st.sidebar:
     st.header("⚙️ Settings")
-    
-    # Model Selection
-    model_options = ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-3-flash-preview"]
-    selected_model = st.selectbox("Choose Model", model_options, index=0)
-    
     system_prompt = st.text_area("System Persona", value="You are a helpful AI assistant.")
     
     with st.expander("Advanced"):
@@ -113,7 +114,7 @@ if prompt := st.chat_input("What is up?"):
     try:
         with st.chat_message("assistant"):
             # Use the model requested by user
-            model_id = selected_model
+            model_id = "gemini-3-flash-preview"
             
             response = None
             retry_count = 0
