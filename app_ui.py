@@ -192,3 +192,6 @@ if prompt := st.chat_input("What is up?"):
                         st.write(f"Debug details: {response.candidates[0].finish_reason if response.candidates else 'No candidates'}")
                     except:
                         pass
+
+    except Exception as e:
+        st.error(f"Error: {e}")
