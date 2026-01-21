@@ -116,64 +116,69 @@ if prompt := st.chat_input("What is up?"):
     try:
         with st.chat_message("assistant"):
             # Use a more stable model to avoid Rate Limits
-            model_id = "gemini-2.0-flash"
+            # Fallback Strategy for Rate Limits
+            fallback_models = [
+                "gemini-2.0-flash", 
+                "gemini-2.0-flash-lite-preview-02-05", 
+                "gemini-flash-latest",
+                "gemini-1.5-pro-latest"
+            ]
             
             response = None
-            retry_count = 0
-            max_retries = 3
+            successful_model = None
             
-            # Prepare Content
-            generation_content = [prompt]
-            if uploaded_file:
-                # Reset file pointer
-                uploaded_file.seek(0)
-                if uploaded_file.type in ["image/png", "image/jpeg", "image/jpg"]:
-                    img = Image.open(uploaded_file)
-                    generation_content.append(img)
-                elif uploaded_file.type == "application/pdf":
-                    generation_content.append(types.Part.from_bytes(
-                        data=uploaded_file.getvalue(),
-                        mime_type="application/pdf"
-                    ))
-            
-            # Load Knowledge Base (Billboards)
-            try:
-                with open("billboards.csv", "r") as f:
-                    kb_data = f.read()
-                full_system_prompt = f"{system_prompt}\n\nKnowledge Base (Billboards):\n{kb_data}"
-            except Exception as e:
-                # Fallback if file missing
-                full_system_prompt = system_prompt
-            
-            placeholder = st.empty()
-            
-            while retry_count < max_retries:
+            for model_id in fallback_models:
+                retry_count = 0
+                max_retries = 2
+                
+                # Check for uploaded file compatibility (some models might not support PDF/Images well, but these Flash ones do)
+                
                 try:
-                    response = client.models.generate_content(
-                        model=model_id,
-                        contents=generation_content,
-                        config=types.GenerateContentConfig(
-                            system_instruction=full_system_prompt,
-                            temperature=temperature,
-                            max_output_tokens=max_tokens
-                        )
-                    )
-                    break 
-                except Exception as e:
-                    # Check for Rate Limit (429) or Quota issues
-                    error_str = str(e)
-                    if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str or "quota" in error_str.lower():
-                        retry_count += 1
-                        if retry_count == max_retries:
-                            raise e
+                     while retry_count < max_retries:
+                        try:
+                            # Placeholder for status update
+                            status_msg = f"Generating with {model_id}..." if retry_count == 0 else f"Retrying with {model_id} (Attempt {retry_count+1})..."
+                            placeholder = st.empty()
+                            # placeholder.info(status_msg) 
+
+                            response = client.models.generate_content(
+                                model=model_id,
+                                contents=generation_content,
+                                config=types.GenerateContentConfig(
+                                    system_instruction=full_system_prompt,
+                                    temperature=temperature,
+                                    max_output_tokens=max_tokens
+                                )
+                            )
+                            successful_model = model_id
+                            placeholder.empty()
+                            break # Success! Break retry loop
                         
-                        # Increase wait time: 20s, 40s, 60s
-                        wait_time = retry_count * 20 
-                        placeholder.warning(f"⚠️ Rate limit hit. Waiting {wait_time} seconds before retrying... (Attempt {retry_count}/{max_retries})")
-                        time.sleep(wait_time)
-                        placeholder.empty()
-                    else:
-                        raise e
+                        except Exception as e:
+                            error_str = str(e)
+                            # Handle Rate Limits
+                            if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str or "quota" in error_str.lower():
+                                retry_count += 1
+                                if retry_count == max_retries:
+                                    # This model failed completely, let's try the next one in the list
+                                    placeholder.warning(f"⚠️ {model_id} is busy. Switching model...")
+                                    time.sleep(1)
+                                    placeholder.empty()
+                                    raise e # Trigger outer loop to continue to next model
+                                else:
+                                    wait_time = retry_count * 5 # Short wait before retry same model
+                                    time.sleep(wait_time)
+                            else:
+                                raise e # Fatal error (not rate limit), stop everything
+                    
+                     if response:
+                        break # Success! Break model loop
+                        
+                except Exception as e:
+                    continue # Try next model
+            
+            if not response:
+                st.error("⚠️ All available models are currently overloaded. Please try again in a few minutes.")
 
             try:
                 response_text = response.text
