@@ -30,6 +30,115 @@ hide_st_style = """
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
+# React Bits "Color Bends" Style Background
+color_bends_css = """
+<style>
+@keyframes move-1 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20vw, -20vh) scale(1.2); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-2 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-20vw, 20vh) scale(0.8); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes move-3 {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20vw, 20vh) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes noise {
+    0% { transform: translate(0, 0); }
+    10% { transform: translate(-5%, -5%); }
+    20% { transform: translate(-10%, 5%); }
+    30% { transform: translate(5%, -10%); }
+    40% { transform: translate(-5%, 15%); }
+    50% { transform: translate(-10%, 5%); }
+    60% { transform: translate(15%, 0); }
+    70% { transform: translate(0, 10%); }
+    80% { transform: translate(-15%, 0); }
+    90% { transform: translate(10%, 5%); }
+    100% { transform: translate(5%, 0); }
+}
+
+.color-bends-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000; /* Dark base */
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.gradient-blob {
+    position: absolute;
+    width: 60vw;
+    height: 60vw;
+    border-radius: 50%;
+    filter: blur(80px); /* Heavy blur for "bends" effect */
+    opacity: 0.7;
+    mix-blend-mode: screen; /* Blend colors nicely */
+}
+
+/* Vivid colors typical of React Bits demos */
+.blob-cyan {
+    top: -10%;
+    left: -10%;
+    background: #00f2ea;
+    animation: move-1 20s ease-in-out infinite;
+}
+.blob-magenta {
+    bottom: -10%;
+    right: -10%;
+    background: #ff0050;
+    animation: move-2 25s ease-in-out infinite reverse;
+}
+.blob-yellow {
+    bottom: -10%;
+    left: -10%;
+    background: #ffea00;
+    animation: move-3 22s ease-in-out infinite;
+}
+.blob-blue {
+    top: -10%;
+    right: -10%;
+    background: #004dff;
+    animation: move-1 28s ease-in-out infinite reverse;
+}
+
+/* Noise overlay for texture */
+.noise-overlay {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    width: 200%;
+    height: 200vh;
+    background: transparent url('http://assets.iceable.com/img/noise-transparent.png') repeat 0 0;
+    background-repeat: repeat;
+    animation: noise .2s infinite;
+    opacity: 0.05;
+    visibility: visible;
+    z-index: 1;
+    pointer-events: none;
+}
+</style>
+
+<div class="color-bends-bg">
+    <div class="gradient-blob blob-cyan"></div>
+    <div class="gradient-blob blob-magenta"></div>
+    <div class="gradient-blob blob-yellow"></div>
+    <div class="gradient-blob blob-blue"></div>
+    <div class="noise-overlay"></div>
+</div>
+"""
+st.markdown(color_bends_css, unsafe_allow_html=True)
+
 # Sidebar Configuration
 with st.sidebar:
     st.header("⚙️ Settings")
@@ -113,8 +222,8 @@ if prompt := st.chat_input("What is up?"):
     # Generate Response
     try:
         with st.chat_message("assistant"):
-            # Use the model requested by user
-            model_id = "gemini-3-flash-preview"
+            # Use a more stable model to avoid Rate Limits
+            model_id = "gemini-2.0-flash-exp"
             
             response = None
             retry_count = 0
