@@ -19,3 +19,4 @@ streamlit
 
 python-dotenv
 Pillow
+altair<5
