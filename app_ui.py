@@ -35,10 +35,21 @@ st.markdown(hide_st_style, unsafe_allow_html=True)
 # Sidebar Configuration
 with st.sidebar:
     st.header("⚙️ Settings")
-    system_prompt = st.text_area("System Persona", value="You are a helpful AI assistant.")
+    
+    default_persona = """You are an expert Billboard & Advertising Consultant for 'n7ob4'. 
+Your goal is to provide accurate, detailed information about billboard locations, prices, and specifications based strictly on the provided Knowledge Base.
+
+Guidelines:
+1. ALWAYS search the "Knowledge Base" first.
+2. If exact details are found, present them in a clean, structured format (e.g., Bullet points or a Table).
+3. detailed breakdown: Include Location, Size, Price (BDT), and Time Schedule.
+4. If a location is NOT in the database, clearly say "I don't have information on that specific location" rather than guessing.
+5. Be professional, concise, and helpful."""
+
+    system_prompt = st.text_area("System Persona", value=default_persona, height=250)
     
     with st.expander("Advanced"):
-        temperature = st.slider("Temperature", 0.0, 2.0, 1.0, 0.1)
+        temperature = st.slider("Temperature", 0.0, 2.0, 0.4, 0.1) # Lowered to 0.4 for accuracy
         max_tokens = st.slider("Max Tokens", 100, 8192, 2048, 100)
 
     st.divider()
@@ -147,9 +158,12 @@ if prompt := st.chat_input("What is up?"):
                 with open("billboards.csv", "r") as f:
                     kb_data = f.read()
                 full_system_prompt = f"{system_prompt}\n\nKnowledge Base (Billboards):\n{kb_data}"
+                st.toast(f"✅ Knowledge Base Loaded ({len(kb_data)} chars)", icon="📚") 
+                # st.write(f"Debug: Loaded {len(kb_data)} chars of billboard data.")
             except Exception as e:
                 # Fallback if file missing
                 full_system_prompt = system_prompt
+                st.error(f"⚠️ Failed to load Knowledge Base: {e}")
             
             response = None
             successful_model = None
