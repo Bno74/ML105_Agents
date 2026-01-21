@@ -118,10 +118,14 @@ if prompt := st.chat_input("What is up?"):
             # Use a more stable model to avoid Rate Limits
             # Fallback Strategy for Rate Limits
             fallback_models = [
-                "gemini-2.0-flash", 
-                "gemini-2.0-flash-lite-preview-02-05", 
-                "gemini-flash-latest",
-                "gemini-1.5-pro-latest"
+                "gemini-2.5-flash",                  # Newest, likely good quota
+                "gemini-2.0-flash",                  # Stable workhorse
+                "gemini-2.0-flash-lite-preview-02-05", # Fast/Lite
+                "gemini-2.0-flash-001",              # Older stable 2.0
+                "gemini-flash-latest",               # Alias for latest flash
+                "gemini-exp-1206",                   # Experimental (high quality)
+                "gemini-2.0-flash-exp",              # Experimental (low quota but worth a shot)
+                "gemini-1.5-pro-latest"              # Heavy duty fallback
             ]
             
             response = None
@@ -162,7 +166,7 @@ if prompt := st.chat_input("What is up?"):
                                 if retry_count == max_retries:
                                     # This model failed completely, let's try the next one in the list
                                     placeholder.warning(f"⚠️ {model_id} is busy. Switching model...")
-                                    time.sleep(1)
+                                    time.sleep(2) # Increased from 1s to 2s to let quota cool down
                                     placeholder.empty()
                                     raise e # Trigger outer loop to continue to next model
                                 else:
