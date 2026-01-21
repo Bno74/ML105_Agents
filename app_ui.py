@@ -128,6 +128,29 @@ if prompt := st.chat_input("What is up?"):
                 "gemini-1.5-pro-latest"              # Heavy duty fallback
             ]
             
+            # Prepare Content (Restored)
+            generation_content = [prompt]
+            if uploaded_file:
+                # Reset file pointer
+                uploaded_file.seek(0)
+                if uploaded_file.type in ["image/png", "image/jpeg", "image/jpg"]:
+                    img = Image.open(uploaded_file)
+                    generation_content.append(img)
+                elif uploaded_file.type == "application/pdf":
+                    generation_content.append(types.Part.from_bytes(
+                        data=uploaded_file.getvalue(),
+                        mime_type="application/pdf"
+                    ))
+            
+            # Load Knowledge Base (Billboards) (Restored)
+            try:
+                with open("billboards.csv", "r") as f:
+                    kb_data = f.read()
+                full_system_prompt = f"{system_prompt}\n\nKnowledge Base (Billboards):\n{kb_data}"
+            except Exception as e:
+                # Fallback if file missing
+                full_system_prompt = system_prompt
+            
             response = None
             successful_model = None
             error_stats = []
