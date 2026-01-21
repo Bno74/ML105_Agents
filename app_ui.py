@@ -130,6 +130,7 @@ if prompt := st.chat_input("What is up?"):
             
             response = None
             successful_model = None
+            error_stats = []
             
             for model_id in fallback_models:
                 retry_count = 0
@@ -179,10 +180,15 @@ if prompt := st.chat_input("What is up?"):
                         break # Success! Break model loop
                         
                 except Exception as e:
+                    # Capture the error to debug why this model failed
+                    error_stats.append(f"{model_id}: {str(e)}")
                     continue # Try next model
             
             if not response:
-                st.error("⚠️ All available models are currently overloaded. Please try again in a few minutes.")
+                st.error("⚠️ All available models are currently overloaded (or incompatible).")
+                with st.expander("🔍 Debug: Why did they fail?"):
+                    for err in error_stats:
+                        st.write(err)
             else:
                 try:
                     response_text = response.text
