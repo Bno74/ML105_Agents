@@ -41,12 +41,16 @@ Your goal is to provide accurate, detailed information about billboard locations
 
 Guidelines:
 1. ALWAYS search the "Knowledge Base" first.
-2. If exact details are found, present them in a clean, structured format (e.g., Bullet points or a Table).
-3. detailed breakdown: Include Location, Size, Price (BDT), and Time Schedule.
+2. If exact details are found, present them in a clean, structured format.
+3. **When comparing locations, ALWAYS use a Markdown table** with columns for Location, Size, Price (BDT), Time Schedule, and other relevant details. ensure the table is complete.
 4. If a location is NOT in the database, clearly say "I don't have information on that specific location" rather than guessing.
 5. Be professional, concise, and helpful."""
 
     system_prompt = st.text_area("System Persona", value=default_persona, height=250)
+    
+    # Ensure system_prompt is available globally if needed (redundant but safe)
+    if "system_prompt" not in locals() or not system_prompt:
+        system_prompt = default_persona
     
     with st.expander("Advanced"):
         temperature = st.slider("Temperature", 0.0, 2.0, 0.4, 0.1) # Lowered to 0.4 for accuracy
@@ -132,10 +136,9 @@ if prompt := st.chat_input("What is up?"):
                 "gemini-2.5-flash",                  # Newest, likely good quota
                 "gemini-2.0-flash",                  # Stable workhorse
                 "gemini-2.0-flash-lite-preview-02-05", # Fast/Lite
+                "gemini-1.5-flash",                  # Reliable previous generation
                 "gemini-2.0-flash-001",              # Older stable 2.0
                 "gemini-flash-latest",               # Alias for latest flash
-                "gemini-exp-1206",                   # Experimental (high quality)
-                "gemini-2.0-flash-exp",              # Experimental (low quota but worth a shot)
                 "gemini-1.5-pro-latest"              # Heavy duty fallback
             ]
             
