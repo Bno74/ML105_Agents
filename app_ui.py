@@ -116,7 +116,7 @@ if prompt := st.chat_input("What is up?"):
     try:
         with st.chat_message("assistant"):
             # Use a more stable model to avoid Rate Limits
-            model_id = "gemini-1.5-flash"
+            model_id = "gemini-2.0-flash"
             
             response = None
             retry_count = 0
