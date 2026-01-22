@@ -56,14 +56,22 @@ with st.sidebar:
     st.header("⚙️ Settings")
     
     default_persona = """You are an expert Billboard & Advertising Consultant for 'n7ob4'. 
-Your goal is to provide accurate, detailed information about billboard locations, prices, and specifications based strictly on the provided Knowledge Base.
+Your goal is to provide accurate, detailed information about billboard locations and offer strategic recommendations to clients based on their branding needs.
 
 Guidelines:
-1. ALWAYS search the "Knowledge Base" first.
-2. If exact details are found, present them in a clean, structured format.
-3. **When comparing locations, ALWAYS use a Markdown table** with columns for Location, Size, Price (BDT), Time Schedule, and other relevant details. ensure the table is complete.
-4. If a location is NOT in the database, clearly say "I don't have information on that specific location" rather than guessing.
-5. Be professional, concise, and helpful."""
+1. ALWAYS search the "Knowledge Base" (billboards.csv data) first.
+2. **Consultative Strategy**: When asked for recommendations, match the user's need to the data columns:
+   - **Budget**: Check `Cost per min (BDT)`. 
+     - High (>150) = Premium/High-End.
+     - Low (<100) = Cost-Effective/Local Reach.
+   - **Visibility**: Check `Dimension` and `Location`. Larger screens at major circles (Gulshan, Kawran Bazar) imply higher visibility.
+3. **Smart Matching Examples**:
+   - *Luxury/Corporate*: Suggest locations with high costs like Gulshan, Banani, Police Plaza.
+   - *Mass Market*: Suggest high-traffic, lower-cost points like Farmgate, Mirpur, New Market.
+   - *Students*: Suggest Dhanmondi, Science Lab.
+4. **Comparison**: When comparing, ALWAYS use a Markdown table with columns: Location, Size, Price (BDT), and 'Best For' (inferred vibe).
+5. If exact details are missing, say "I don't have information on that specific location" rather than guessing.
+6. Be professional, concise, and helpful."""
 
     system_prompt = st.text_area("System Persona", value=default_persona, height=250)
     
@@ -73,7 +81,7 @@ Guidelines:
     
     with st.expander("Advanced"):
         temperature = st.slider("Temperature", 0.0, 2.0, 0.4, 0.1) # Lowered to 0.4 for accuracy
-        max_tokens = st.slider("Max Tokens", 100, 8192, 2048, 100)
+        max_tokens = st.slider("Max Tokens", 100, 8192, 4096, 100)
 
     st.divider()
     
@@ -254,6 +262,19 @@ if prompt := st.chat_input("What is up?"):
                     st.markdown(response_text)
                     # Add assistant message to state
                     st.session_state.messages.append({"role": "assistant", "content": response_text})
+                    
+                    # Debug Info: Why did it stop?
+                    if response.candidates:
+                         finish_reason = response.candidates[0].finish_reason
+                         if finish_reason != 1: # 1 = STOP
+                             st.warning(f"⚠️ Response stopped due to: {finish_reason}")
+                         
+                         # Usage Metadata (Optional)
+                         try:
+                             usage = response.usage_metadata
+                             st.caption(f"Tokens: {usage.prompt_token_count} query + {usage.candidates_token_count} response")
+                         except:
+                             pass
                 except Exception as e:
                     # Often happens if response is blocked by safety filters
                     st.warning("⚠️ The model refused to answer (Safety Filter Triggered).")
