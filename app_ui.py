@@ -26,6 +26,25 @@ hide_st_style = """
             [data-testid="stStatusWidget"] {visibility: hidden !important;}
             [data-testid="stHeader"] {display: none !important;}
             header {display: none !important;}
+            
+            /* Mobile Optimization */
+            @media (max-width: 768px) {
+                .block-container {
+                    padding-top: 1rem !important;
+                    padding-bottom: 5rem !important;
+                    padding-left: 0.5rem !important;
+                    padding-right: 0.5rem !important;
+                }
+                .element-container {
+                    width: 100% !important;
+                }
+                [data-testid="stChatInput"] {
+                    padding-bottom: 20px;
+                }
+                h1 {
+                    font-size: 1.8rem !important;
+                }
+            }
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
