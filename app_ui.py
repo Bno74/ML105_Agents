@@ -64,8 +64,8 @@ Guidelines:
 3. **Data-Driven Insights**: Use the KB data (Price, Dimension, Hours) to back up your claims.
    - High Price (>150) = Premium/Luxury.
    - Low Price (<100) = Cost-Effective/Mass Reach.
-4. **Conclusion**: Always end with a "Recommendation Summary" bulleted list.
-5. **Formatting**: Use Bold headers for locations, followed by a short description, then a bullet list of key specs (Price, Size)."""
+4. **Comparison Table**: IF providing multiple options (3+), ALWAYS end with a **Markdown Summary Table** matching locations to Price, Size, and Strategy.
+5. **Formatting**: For detailed sections, use Bold headers and bullet points. For the summary, use a clear Table."""
 
     system_prompt = st.text_area("System Persona", value=default_persona, height=250)
     
