@@ -56,22 +56,16 @@ with st.sidebar:
     st.header("⚙️ Settings")
     
     default_persona = """You are an expert Billboard & Advertising Consultant for 'n7ob4'. 
-Your goal is to provide accurate, detailed information about billboard locations and offer strategic recommendations to clients based on their branding needs.
+Your goal is to provide deep, strategic insights. DON'T just list data; analyze it.
 
 Guidelines:
-1. ALWAYS search the "Knowledge Base" (billboards.csv data) first.
-2. **Consultative Strategy**: When asked for recommendations, match the user's need to the data columns:
-   - **Budget**: Check `Cost per min (BDT)`. 
-     - High (>150) = Premium/High-End.
-     - Low (<100) = Cost-Effective/Local Reach.
-   - **Visibility**: Check `Dimension` and `Location`. Larger screens at major circles (Gulshan, Kawran Bazar) imply higher visibility.
-3. **Smart Matching Examples**:
-   - *Luxury/Corporate*: Suggest locations with high costs like Gulshan, Banani, Police Plaza.
-   - *Mass Market*: Suggest high-traffic, lower-cost points like Farmgate, Mirpur, New Market.
-   - *Students*: Suggest Dhanmondi, Science Lab.
-4. **Comparison**: When comparing, ALWAYS use a Markdown table with columns: Location, Size, Price (BDT), and 'Best For' (inferred vibe).
-5. If exact details are missing, say "I don't have information on that specific location" rather than guessing.
-6. Be professional, concise, and helpful."""
+1. **Categorize Recommendations**: Group options by strategy (e.g., "Top Priority", "High Visibility", "Budget-Friendly").
+2. **Provide Reasoning**: For each location, explain WHY it fits the user's need (e.g., "Perfect for students due to proximity to City College").
+3. **Data-Driven Insights**: Use the KB data (Price, Dimension, Hours) to back up your claims.
+   - High Price (>150) = Premium/Luxury.
+   - Low Price (<100) = Cost-Effective/Mass Reach.
+4. **Conclusion**: Always end with a "Recommendation Summary" bulleted list.
+5. **Formatting**: Use Bold headers for locations, followed by a short description, then a bullet list of key specs (Price, Size)."""
 
     system_prompt = st.text_area("System Persona", value=default_persona, height=250)
     
@@ -148,35 +142,35 @@ with st.popover("📎 Attach"):
 suggested_prompt = None
 sq_cols = st.columns(3)
 if sq_cols[0].button("💎 Best for Luxury?"):
-    suggested_prompt = "What are the best billboard locations for a Luxury Brand?"
+    suggested_prompt = "Provide a strategic analysis of the best billboard locations for a Luxury Brand, including reasoning."
 if sq_cols[1].button("💰 Cheap Options?"):
-    suggested_prompt = "What are the most cost-effective billboard locations?"
+    suggested_prompt = "Identify cost-effective billboard locations and explain their value proposition for low budgets."
 if sq_cols[2].button("🆚 Gulshan vs Dhanmondi"):
-    suggested_prompt = "Compare billboard options in Gulshan vs Dhanmondi in a table."
+    suggested_prompt = "Compare Gulshan vs Dhanmondi billboards with a strategic focus on audience and return on investment."
 
 sq_cols_2 = st.columns(3)
 if sq_cols_2[0].button("🎓 Student Target?"):
-    suggested_prompt = "Where should I advertise to reach university students?"
+    suggested_prompt = "Recommend the top locations to target university students, explaining why each spot works."
 if sq_cols_2[1].button("📈 High Traffic?"):
-    suggested_prompt = "List the locations with the highest visibility and traffic."
+    suggested_prompt = "Identify high-visibility locations and analyze their traffic potential for brand awareness."
 if sq_cols_2[2].button("🗺️ Chittagong Spots?"):
-    suggested_prompt = "What billboard options are available in Chittagong?"
+    suggested_prompt = "Provide a strategic overview of billboard options in Chittagong and their best use cases."
 
 sq_cols_3 = st.columns(3)
 if sq_cols_3[0].button("🌊 Cox's Bazar?"):
-    suggested_prompt = "Show me billboard options in Cox's Bazar."
+    suggested_prompt = "Analyze the advertising potential in Cox's Bazar, specifically targeting tourists."
 if sq_cols_3[1].button("🍃 Sylhet Options?"):
-    suggested_prompt = "What billboard locations are available in Sylhet?"
+    suggested_prompt = "Recommend the best billboard spots in Sylhet based on location value and audience."
 if sq_cols_3[2].button("💡 Best LED Screens?"):
-    suggested_prompt = "Which locations have high-quality LED/Digital screens?"
+    suggested_prompt = "Evaluate the best LED/Digital screens available, focusing on display quality and impact."
 
 sq_cols_4 = st.columns(3)
 if sq_cols_4[0].button("🏰 Rajshahi & Rangpur?"):
-    suggested_prompt = "Present the detailed specifications for billboards in Rajshahi and Rangpur in a structured list format."
+    suggested_prompt = "Analyze the billboard landscape in Rajshahi and Rangpur, offering key recommendations."
 if sq_cols_4[1].button("🛣️ Comilla & Feni?"):
-    suggested_prompt = "Show me the billboard details for Comilla and Feni in a clean, structured list."
+    suggested_prompt = "Provide a strategic breakdown of billboard opportunities in Comilla and Feni."
 if sq_cols_4[2].button("🏙️ Bogura & Narayanganj?"):
-    suggested_prompt = "Provide the billboard specifications for Bogura and Narayanganj in a detailed, bulleted list format."
+    suggested_prompt = "Evaluate billboard advertising availability in Bogura and Narayanganj."
 
 # User Input
 if prompt := (st.chat_input("What is up?") or suggested_prompt):
