@@ -75,14 +75,11 @@ Guidelines:
     
     with st.expander("Advanced"):
         temperature = st.slider("Temperature", 0.0, 2.0, 0.4, 0.1) # Lowered to 0.4 for accuracy
-        max_tokens = st.slider("Max Tokens", 100, 8192, 4096, 100)
+        max_tokens = st.slider("Max Tokens", 100, 8192, 8192, 100)
 
     st.divider()
     
     # Download Chat History
-    import json
-    chat_json = json.dumps(st.session_state.get("messages", []), indent=2)
-    st.download_button("📥 Download History", chat_json, "chat_history.json", "application/json")
     
     if st.button("🗑️ Clear Chat"):
         st.session_state.messages = []
@@ -136,6 +133,30 @@ with st.popover("📎 Attach"):
         "Upload Image/PDF", 
         type=["png", "jpg", "jpeg", "pdf"],
         key="chat_uploader" 
+    )
+
+# Save Chat Feature
+with st.popover("💾 Save Chat"):
+    import json
+    chat_json = json.dumps(st.session_state.get("messages", []), indent=2)
+    st.download_button(
+        "📥 Download JSON", 
+        chat_json, 
+        "chat_history.json", 
+        "application/json"
+    )
+    
+    # Human Readable Report
+    chat_md = "# Chat Report\n\n"
+    for msg in st.session_state.get("messages", []):
+        role_icon = "👤" if msg["role"] == "user" else "🤖"
+        chat_md += f"### {role_icon} {msg['role'].capitalize()}\n{msg['content']}\n\n---\n\n"
+        
+    st.download_button(
+        "📄 Download Report (.md)", 
+        chat_md, 
+        "chat_report.md", 
+        "text/markdown"
     )
 
 # Suggested Questions
