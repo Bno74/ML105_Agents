@@ -144,8 +144,42 @@ with st.popover("📎 Attach"):
         key="chat_uploader" 
     )
 
+# Suggested Questions
+suggested_prompt = None
+sq_cols = st.columns(3)
+if sq_cols[0].button("💎 Best for Luxury?"):
+    suggested_prompt = "What are the best billboard locations for a Luxury Brand?"
+if sq_cols[1].button("💰 Cheap Options?"):
+    suggested_prompt = "What are the most cost-effective billboard locations?"
+if sq_cols[2].button("🆚 Gulshan vs Dhanmondi"):
+    suggested_prompt = "Compare billboard options in Gulshan vs Dhanmondi in a table."
+
+sq_cols_2 = st.columns(3)
+if sq_cols_2[0].button("🎓 Student Target?"):
+    suggested_prompt = "Where should I advertise to reach university students?"
+if sq_cols_2[1].button("📈 High Traffic?"):
+    suggested_prompt = "List the locations with the highest visibility and traffic."
+if sq_cols_2[2].button("🗺️ Chittagong Spots?"):
+    suggested_prompt = "What billboard options are available in Chittagong?"
+
+sq_cols_3 = st.columns(3)
+if sq_cols_3[0].button("🌊 Cox's Bazar?"):
+    suggested_prompt = "Show me billboard options in Cox's Bazar."
+if sq_cols_3[1].button("🍃 Sylhet Options?"):
+    suggested_prompt = "What billboard locations are available in Sylhet?"
+if sq_cols_3[2].button("💡 Best LED Screens?"):
+    suggested_prompt = "Which locations have high-quality LED/Digital screens?"
+
+sq_cols_4 = st.columns(3)
+if sq_cols_4[0].button("🏰 Rajshahi & Rangpur?"):
+    suggested_prompt = "Present the detailed specifications for billboards in Rajshahi and Rangpur in a structured list format."
+if sq_cols_4[1].button("🛣️ Comilla & Feni?"):
+    suggested_prompt = "Show me the billboard details for Comilla and Feni in a clean, structured list."
+if sq_cols_4[2].button("🏙️ Bogura & Narayanganj?"):
+    suggested_prompt = "Provide the billboard specifications for Bogura and Narayanganj in a detailed, bulleted list format."
+
 # User Input
-if prompt := st.chat_input("What is up?"):
+if prompt := (st.chat_input("What is up?") or suggested_prompt):
     # Add user message to state
     st.session_state.messages.append({"role": "user", "content": prompt})
     # Display user message
@@ -266,7 +300,9 @@ if prompt := st.chat_input("What is up?"):
                     # Debug Info: Why did it stop?
                     if response.candidates:
                          finish_reason = response.candidates[0].finish_reason
-                         if finish_reason != 1: # 1 = STOP
+                         # Check if it finished naturally (STOP)
+                         # finish_reason might be an Enum or Int depending on version, convert to str to be safe
+                         if str(finish_reason) != "FinishReason.STOP" and str(finish_reason) != "1":
                              st.warning(f"⚠️ Response stopped due to: {finish_reason}")
                          
                          # Usage Metadata (Optional)
